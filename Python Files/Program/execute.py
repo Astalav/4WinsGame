@@ -1,3 +1,3 @@
-import annuDarlehen
+import FourWinsGame
 
-annuDarlehen.run()
+FourWinsGame.run()
