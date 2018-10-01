@@ -3,19 +3,40 @@
 import os
 os.sys.path.append(os.path.realpath(os.path.dirname(__file__)+ "/.."))
 from Program import FourWinsGame
+from Program import Field
 import pytest
+import random
 
-#def testAnnuDarlehen():
-#	assert 21835.457140057595 == annuDarlehen.calcAnnuDarlehen(100000, 0.03, 5)
+def testStart():
+	empty_field = [None] * 42
+	a = Field.Field()
+	assert a.getActivePlayer() == False
+	assert a.getField() == empty_field
 
-#def testInput(monkeypatch):
-#	inputs = [10, 'y']
-#    input_generator = (i for i in inputs)
-#	monkeypatch.setattr('__builtin__.raw_input', lambda prompt: next(input_generator))
-#	
-#	try:
-#		annuDarlehen.run()
-#	except Exception:
-#		print("\nFail")
-#
-#	assert out == "test"
+def testCheckWinner():
+	# generate Fields
+	a = Field.Field()
+	horizontal = [[0, 1, 2, 3], [15, 16, 17, 18], [30, 31, 32, 33]]
+	vertically = [[0, 7, 14, 21], [17, 24, 31, 38], [20, 27, 34, 41]]
+	diagonal = [[35, 29, 23, 17], [40, 32, 24, 16], [31, 25, 19, 13], [31, 23, 15, 7]]
+
+	for i in horizontal:
+		field = [None] * 42
+		for y in i:
+			field[y] = 1 
+		current = i[random.randint(0, 3)]
+		assert a.checkWinner(current, field) == 1
+	
+	for i in vertically:
+		field = [None] * 42
+		for y in i:
+			field[y] = 1 
+		current = i[random.randint(0, 3)]
+		assert a.checkWinner(current, field) == 1
+
+	for i in diagonal:
+		field = [None] * 42
+		for y in i:
+			field[y] = 1 
+		current = i[random.randint(0, 3)]
+		assert a.checkWinner(current, field) == 1
