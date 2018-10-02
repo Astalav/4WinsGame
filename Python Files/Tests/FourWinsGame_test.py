@@ -40,3 +40,16 @@ def testCheckWinner():
 			field[y] = 1 
 		current = i[random.randint(0, 3)]
 		assert a.checkWinner(current, field) == 1
+
+def testchangePlayer():
+	a = Field.Field()
+	player = a.getActivePlayer()
+	a.changePlayer()
+	assert a.getActivePlayer() != player
+
+def testsetStone():
+	a = Field.Field()
+	a.setStone(0)
+	assert a.getField()[35] == False
+	a.setStone(0)
+	assert a.getField()[28] == True
