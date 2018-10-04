@@ -18,11 +18,11 @@ class Field(ABC):
     # returns current Player
         return self._activePlayer
 
-    def changePlayer(self):
+    def __changePlayer(self):
     # changes current Player
         self._activePlayer = not self._activePlayer
 
-    def setStone(self, column):
+    def _setStone(self, column):
     # Sets Stone by given column: 
     # Stone falls until he hits the ground or another Stone
     # If a field is filled the field above is filled with current Players Stone
@@ -36,7 +36,7 @@ class Field(ABC):
                     self._yellow.append(field-7)
                 else:
                     self._red.append(field-7)
-                self.changePlayer()
+                self.__changePlayer()
                 break
 
             elif x == 5:
@@ -45,10 +45,10 @@ class Field(ABC):
                     self._yellow.append(field)
                 else:
                     self._red.append(field)
-                self.changePlayer()
+                self.__changePlayer()
                 break
 
-    def checkWinner(self):
+    def _checkWinner(self):
     # Checks if there is an row of four equal Stones according to the last set Stone
     # returns Winner if there is one
 
@@ -91,13 +91,13 @@ class GUI(Field):
     def __init__ (self): 
         Field.__init__(self)   
 
-    def drawRed(self, field):
+    def __drawRed(self, field):
     # draws a red Stone in given field
         y = 6 - math.ceil((field +1) / 7)
         x = field - math.floor((field) / 7)*7
         screen.draw.filled_circle((60 + x * 70, 565 - 70 * y), 30, (255, 0, 0))
 
-    def drawYellow(self, field):
+    def __drawYellow(self, field):
     # draws a yellow Stone in given field
         y = 6 - math.ceil((field +1) / 7)
         x = field - math.floor((field) / 7)*7
@@ -123,25 +123,25 @@ class GUI(Field):
 
         # draw 'stone' appending to given field
         for x in self._yellow:
-            self.drawYellow(x)
+            self.__drawYellow(x)
 
         for x in self._red:
-            self.drawRed(x)
+            self.__drawRed(x)
 
         # give message if there is a winner
-        if self.checkWinner() == False:
+        if self._checkWinner() == False:
             screen.draw.text("Red wins", (235, 100), color='red')
-        elif self.checkWinner() == True:
+        elif self._checkWinner() == True:
             screen.draw.text("Yellow wins", (235, 100), color='yellow')
 
 
     def clicked(self,pos):
     # as long as there is no winner add a stone to a column by clicking on the field in the first row
-        if self.checkWinner() != False and self.checkWinner() != True:
+        if self._checkWinner() != False and self._checkWinner() != True:
             for x in range(0, 7):
                 if pos[1] > 180 and pos[1] < 245:
                     if pos[0] > 30 + x*70 and pos[0] < 90 + x*70:
-                        self.setStone(x)
+                        self._setStone(x)
 
 
 a = GUI()
@@ -151,7 +151,6 @@ def draw():
 
 def on_mouse_down(pos):    
     a.clicked(pos)
-    a.checkWinner()
     draw()
-    
+
 pgzrun.go()
