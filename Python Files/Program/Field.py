@@ -69,10 +69,14 @@ class Field(ABC):
             win = 1
             for x in range (1, 5):
                 if last + (i*x) < 42 and currentPlayground[last + (i*x)] == currentPlayground[last]:
+                    # check if all fields in one row (horizontal)
                     if i == 1 and math.floor((last+(i*x))/7) == math.floor(last/7):
                         win = win + 1
-                    elif math.floor((last+(i*x))/7) == math.floor(last / 7) + i:
+                    # check if all fields in successive rows
+                    elif math.floor((last+(i*x))/7) == math.floor(last / 7) + x:
                         win = win + 1
+                    else:
+                        break
                 else:
                     break
                 if win == 4:
@@ -82,8 +86,10 @@ class Field(ABC):
                 if last - (i*x) > -1 and currentPlayground[last - (i*x)] == currentPlayground[last]:
                     if i == 1 and math.floor((last-(i*x))/7) == math.floor(last/7):
                         win = win + 1
-                    elif math.floor((last-(i*x))/7) == math.floor(last/7) - i:
+                    elif math.floor((last-(i*x))/7) == math.floor(last/7) - x:
                         win = win + 1
+                    else:
+                        break
                 else:
                     break
                 if win == 4:
