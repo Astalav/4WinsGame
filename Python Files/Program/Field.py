@@ -64,6 +64,9 @@ class Field(ABC):
     # Checks if there is an row of four equal Stones according to the last set Stone
     # returns Winner if there is one
 
+        if self._playground.count(None) == 0:
+            return 'draw'
+            
         # steps descripes the difference between two Fields to be in one line: 
         # horizontal: 1 vertically: 7 diagonal_up: 6 diagonal_down: 8
         steps = [1, 7, 6, 8]
@@ -160,6 +163,8 @@ class GUI(Field):
             screen.draw.text("Red wins", (20, 115), color='red')
         elif self._checkWinner() == True:
             screen.draw.text("Yellow wins", (20, 115), color=(255,215,0))
+        elif self._checkWinner() == 'draw':
+            screen.draw.text("Draw", (20, 115), color='black')
         elif self.getActivePlayer():
             screen.draw.text("Yellows Turn", (20, 115), color='black')
         else:
