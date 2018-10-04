@@ -6,13 +6,13 @@ class Field(ABC):
     def __init__ (self):                
     #sets all values for initilization
         self._activePlayer = False
-        self._field = [None] * 42
+        self._playground = [None] * 42
         self._yellow = []
         self._red = []
 
     def getField(self):
-    # returns current Field
-        return self._field
+    # returns current Playground
+        return self._playground
 
     def getActivePlayer(self):
     # returns current Player
@@ -30,8 +30,8 @@ class Field(ABC):
         for x in range(0, 6):
             field = column + x*7
 
-            if self._field[field] != None:
-                self._field[field - 7] = self.getActivePlayer()
+            if self._playground[field] != None:
+                self._playground[field - 7] = self.getActivePlayer()
                 if self.getActivePlayer():
                     self._yellow.append(field-7)
                 else:
@@ -40,7 +40,7 @@ class Field(ABC):
                 break
 
             elif x == 5:
-                self._field[field] = self.getActivePlayer()
+                self._playground[field] = self.getActivePlayer()
                 if self.getActivePlayer():
                     self._yellow.append(field)
                 else:
@@ -56,34 +56,34 @@ class Field(ABC):
         # horizontal: 1 vertically: 7 diagonal_up: 6 diagonal_down: 8
         steps = [1, 7, 6, 8]
 
-        # get last added stone and current field
+        # get last added stone and current playground
         if len(self._red) == 0 and len(self._yellow) == 0:
             return
         elif self.getActivePlayer():
             last = self._red[len(self._red) -1]
         else:
             last = self._yellow[len(self._yellow) -1]
-        currentField = self._field
+        currentPlayground = self._playground
 
         for i in steps:
             win = 1
             for x in range (1, 5):
-                if last + (i*x) < 42 and currentField[last + (i*x)] == currentField[last]:
+                if last + (i*x) < 42 and currentPlayground[last + (i*x)] == currentPlayground[last]:
                     win = win + 1
                 else:
                     break
               
                 if win == 4:
-                    return currentField[last]
+                    return currentPlayground[last]
             
             for x in range (1, 5):
-                if last + (i*x) > -1 and currentField[last - (i*x)] == currentField[last]:
+                if last + (i*x) > -1 and currentPlayground[last - (i*x)] == currentPlayground[last]:
                     win = win + 1
                 else:
                     break
             
                 if win == 4:
-                    return currentField[last]
+                    return currentPlayground[last]
         
 
 class GUI(Field): 
@@ -111,7 +111,7 @@ class GUI(Field):
         HEIGHT = 600
         screen.fill((255, 255, 255))
 
-        #draw empty field
+        #draw empty playground
         blue = 0, 50, 200
         box = Rect((20, 150), (screen.height - 100,450))        
         screen.draw.filled_rect(box, blue)
