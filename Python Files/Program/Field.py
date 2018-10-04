@@ -10,7 +10,7 @@ class Field(ABC):
         self._yellow = []
         self._red = []
 
-    def getField(self):
+    def getPlayground(self):
     # returns current Playground
         return self._playground
 
@@ -27,10 +27,10 @@ class Field(ABC):
     # Stone falls until he hits the ground or another Stone
     # If a field is filled the field above is filled with current Players Stone
 
-        for x in range(0, 6):
+        for x in range(1, 6):
             field = column + x*7
 
-            if self._playground[field] != None:
+            if self._playground[field] != None and self._playground[column] == None:
                 self._playground[field - 7] = self.getActivePlayer()
                 if self.getActivePlayer():
                     self._yellow.append(field-7)
@@ -39,7 +39,7 @@ class Field(ABC):
                 self.__changePlayer()
                 break
 
-            elif x == 5:
+            elif x == 5 and self._playground[column] == None:
                 self._playground[field] = self.getActivePlayer()
                 if self.getActivePlayer():
                     self._yellow.append(field)
@@ -69,19 +69,23 @@ class Field(ABC):
             win = 1
             for x in range (1, 5):
                 if last + (i*x) < 42 and currentPlayground[last + (i*x)] == currentPlayground[last]:
-                    win = win + 1
+                    if i == 1 and math.floor((last+(i*x))/7) == math.floor(last/7):
+                        win = win + 1
+                    elif math.floor((last+(i*x))/7) == math.floor(last / 7) + i:
+                        win = win + 1
                 else:
                     break
-              
                 if win == 4:
                     return currentPlayground[last]
             
             for x in range (1, 5):
-                if last + (i*x) > -1 and currentPlayground[last - (i*x)] == currentPlayground[last]:
-                    win = win + 1
+                if last - (i*x) > -1 and currentPlayground[last - (i*x)] == currentPlayground[last]:
+                    if i == 1 and math.floor((last-(i*x))/7) == math.floor(last/7):
+                        win = win + 1
+                    elif math.floor((last-(i*x))/7) == math.floor(last/7) - i:
+                        win = win + 1
                 else:
                     break
-            
                 if win == 4:
                     return currentPlayground[last]
         
@@ -89,8 +93,9 @@ class Field(ABC):
 class GUI(Field): 
 
     def __init__ (self): 
-        Field.__init__(self)   
-
+        Field.__init__(self) 
+        self.__restart = Actor('restart', (35,120))
+        
     def __drawRed(self, field):
     # draws a red Stone in given field
         y = 6 - math.ceil((field +1) / 7)
@@ -113,13 +118,13 @@ class GUI(Field):
 
         #draw empty playground
         blue = 0, 50, 200
-        box = Rect((20, 150), (screen.height - 100,450))        
+        box = Rect((20, 150), (HEIGHT - 100,450))        
         screen.draw.filled_rect(box, blue)
 
         # circle radius = 30, space between = 10, startX = 60, startY = 565
         for y in range (0,6):    
             for x in range(0, 7):
-                screen.draw.filled_circle((60 + x * 70, screen.height - 35 - 70 * y), 30, (255, 255, 255))
+                screen.draw.filled_circle((60 + x * 70, HEIGHT - 35 - 70 * y), 30, (255, 255, 255))
 
         # draw 'stone' appending to given field
         for x in self._yellow:
@@ -130,10 +135,11 @@ class GUI(Field):
 
         # give message if there is a winner
         if self._checkWinner() == False:
-            screen.draw.text("Red wins", (235, 100), color='red')
+            screen.draw.text("Red wins", (60, 115), color='red')
+            self.__restart.draw()
         elif self._checkWinner() == True:
-            screen.draw.text("Yellow wins", (235, 100), color='yellow')
-
+            screen.draw.text("Yellow wins", (60, 115), color='yellow')
+            self.__restart.draw()
 
     def clicked(self,pos):
     # as long as there is no winner add a stone to a column by clicking on the field in the first row
@@ -142,6 +148,10 @@ class GUI(Field):
                 if pos[1] > 180 and pos[1] < 245:
                     if pos[0] > 30 + x*70 and pos[0] < 90 + x*70:
                         self._setStone(x)
+        else:
+            if self.__restart.collidepoint(pos):
+                self.__init__()
+  
 
 
 a = GUI()
