@@ -113,13 +113,13 @@ class GUI(Field):
 
         #draw empty field
         blue = 0, 50, 200
-        box = Rect((20, 150), (500,450))        
+        box = Rect((20, 150), (screen.height - 100,450))        
         screen.draw.filled_rect(box, blue)
 
         # circle radius = 30, space between = 10, startX = 60, startY = 565
         for y in range (0,6):    
             for x in range(0, 7):
-                screen.draw.filled_circle((60 + x * 70, 565 - 70 * y), 30, (255, 255, 255))
+                screen.draw.filled_circle((60 + x * 70, screen.height - 35 - 70 * y), 30, (255, 255, 255))
 
         # draw 'stone' appending to given field
         for x in self._yellow:
@@ -151,6 +151,5 @@ def draw():
 
 def on_mouse_down(pos):    
     a.clicked(pos)
-    draw()
 
 pgzrun.go()
