@@ -5,11 +5,12 @@ from abc import ABC, abstractmethod
 from Field import Field
 import Player
 
-class GUI(Field): 
+class GUI(): 
     def __init__ (self): 
         Field.__init__(self) 
         self.__restart = Actor('restart', (540, 165))
         self.__undo = Actor('back', (575, 165))
+        self.__playground = Field()
         
     def __drawRed(self, field):
     # draws a red Stone in given field
@@ -42,23 +43,23 @@ class GUI(Field):
                 screen.draw.filled_circle((60 + x * 70, HEIGHT - 35 - 70 * y), 30, (255, 255, 255))
 
         # draw 'stone' appending to given field
-        for x in self._yellow:
+        for x in self.__playground._yellow:
             self.__drawYellow(x)
 
-        for x in self._red:
+        for x in self.__playground._red:
             self.__drawRed(x)
 
         self.__restart.draw()
         self.__undo.draw()
 
         # give message if there is a winner
-        if self.checkWinner() == False:
+        if self.__playground.checkWinner() == False:
             screen.draw.text("Red wins", (20, 115), color='red')
-        elif self.checkWinner() == True:
+        elif self.__playground.checkWinner() == True:
             screen.draw.text("Yellow wins", (20, 115), color=(255,215,0))
-        elif self.checkWinner() == 'draw':
+        elif self.__playground.checkWinner() == 'draw':
             screen.draw.text("Draw", (20, 115), color='black')
-        elif self.getActivePlayer():
+        elif self.__playground.getActivePlayer():
             screen.draw.text("Yellows Turn", (20, 115), color='black')
         else:
             screen.draw.text("Reds Turn", (20, 115), color='black')
@@ -66,22 +67,22 @@ class GUI(Field):
 
     def clicked(self,pos):
     # as long as there is no winner add a stone to a column by clicking on the field in the first row
-        if self.checkWinner() != False and self.checkWinner() != True:
-            if self._activePlayer == False:
+        if self.__playground.checkWinner() != False and self.__playground.checkWinner() != True:
+            if self.__playground._activePlayer == False:
                 player = Player.HumanPlayer(True)
-                clickval = player.play(self, pos)
+                clickval = player.play(pos)
                 if clickval != None:
-                    self.setStone(clickval)
+                    self.__playground.setStone(clickval)
             else:
                 player = Player.KIPlayer(False)
-                clickval = player.play(self, pos)
-                self.setStone(clickval)
+                clickval = player.play(self.__playground, pos)
+                self.__playground.setStone(clickval)
 
         if self.__restart.collidepoint(pos):
-            self.__init__()
+            self.__playground = Field()
 
         if self.__undo.collidepoint(pos):
-            self._undo()
+            self.__playground._undo()
   
 
 

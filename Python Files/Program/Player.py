@@ -10,14 +10,14 @@ class Player(ABC):
 		pass
 
 	@abstractmethod
-	def play(field):
+	def play(self, field):
 		pass
 
 class HumanPlayer(Player):
 	def __init__(self, playerValue):
 		self.__playerValue = playerValue
 	
-	def play(self, field, pos):
+	def play(self, pos):
 		for x in range(0, 7):
 			if pos[1] > 180 and pos[1] < 245:
 				if pos[0] > 30 + x*70 and pos[0] < 90 + x*70:
