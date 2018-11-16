@@ -7,10 +7,15 @@ import Player
 
 class GUI(): 
     def __init__ (self): 
-        Field.__init__(self) 
         self.__restart = Actor('restart', (540, 165))
         self.__undo = Actor('back', (575, 165))
         self.__playground = Field()
+        self.__PLAYER1_VALUE = True #red
+        self.__PLAYER2_VALUE = False #yellow
+        #self.player1 = Player.HumanPlayer(self.__PLAYER1_VALUE)
+        #self.player2 = Player.HumanPlayer(self.__PLAYER2_VALUE)
+        self.player1 = Player.KIPlayer(self.__PLAYER1_VALUE)
+        self.player2 = Player.KIPlayer(self.__PLAYER2_VALUE)
         
     def __drawRed(self, field):
     # draws a red Stone in given field
@@ -68,15 +73,14 @@ class GUI():
     def clicked(self,pos):
     # as long as there is no winner add a stone to a column by clicking on the field in the first row
         if self.__playground.checkWinner() != False and self.__playground.checkWinner() != True:
-            if self.__playground._activePlayer == False:
-                player = Player.HumanPlayer(True)
-                clickval = player.play(pos)
+            if self.__playground._activePlayer == self.__PLAYER1_VALUE:
+                clickval = self.player1.play(self.__playground, pos)
                 if clickval != None:
                     self.__playground.setStone(clickval)
             else:
-                player = Player.KIPlayer(False)
-                clickval = player.play(self.__playground, pos)
-                self.__playground.setStone(clickval)
+                clickval = self.player2.play(self.__playground, pos)
+                if clickval != None:
+                    self.__playground.setStone(clickval)
 
         if self.__restart.collidepoint(pos):
             self.__playground = Field()

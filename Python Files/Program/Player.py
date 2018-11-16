@@ -17,7 +17,7 @@ class HumanPlayer(Player):
 	def __init__(self, playerValue):
 		self.__playerValue = playerValue
 	
-	def play(self, pos):
+	def play(self, field, pos):
 		for x in range(0, 7):
 			if pos[1] > 180 and pos[1] < 245:
 				if pos[0] > 30 + x*70 and pos[0] < 90 + x*70:
@@ -33,7 +33,7 @@ class KIPlayer(Player):
 		maxVal = -math.inf
 		maxIndex = 0
 		possibleMoves = field.possibleMoves()
-		#shuffle(possibleMoves)
+		shuffle(possibleMoves)
 
 		for i in possibleMoves:
 			f = copy.deepcopy(field)
@@ -47,6 +47,8 @@ class KIPlayer(Player):
 
 	def __alphabeta(self, field, depth, alpha, beta, maximizingPlayer):
 		fieldValue = self.__evaluateField(field)
+		if abs(fieldValue) == 512:
+			return fieldValue
 		if depth == 0 or fieldValue != 0:
 			return fieldValue
 

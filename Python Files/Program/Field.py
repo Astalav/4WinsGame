@@ -77,9 +77,6 @@ class Field(ABC):
     def checkWinner(self):
     # Checks if there is an row of four equal Stones according to the last set Stone
     # returns Winner if there is one
-
-        if self._playground.count(None) == 0:
-            return 'draw'
             
         # steps descripes the difference between two Fields to be in one line: 
         # horizontal: 1 vertically: 7 diagonal_up: 6 diagonal_down: 8
@@ -102,7 +99,7 @@ class Field(ABC):
                     if i == 1 and math.floor((last+(i*x))/7) == math.floor(last/7):
                         win = win + 1
                     # check if all fields in successive rows
-                    elif math.floor((last+(i*x))/7) == math.floor(last / 7) + x:
+                    elif i != 1 and math.floor((last+(i*x))/7) == math.floor(last / 7) + x:
                         win = win + 1
                     else:
                         break
@@ -123,3 +120,6 @@ class Field(ABC):
                     break
                 if win == 4:
                     return currentPlayground[last]
+        
+        if self._playground.count(None) == 0:
+            return 'draw'
