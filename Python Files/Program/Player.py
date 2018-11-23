@@ -38,7 +38,7 @@ class KIPlayer(Player):
 		for i in possibleMoves:
 			f = copy.deepcopy(field)
 			f.setStone(i)
-			evaluation = self.__alphabeta(f, 4, -math.inf, math.inf, False)
+			evaluation = self.__alphabeta(f, 5, -math.inf, math.inf, False)
 			if maxVal < evaluation:
 				maxVal = evaluation
 				maxIndex = i
@@ -46,8 +46,8 @@ class KIPlayer(Player):
 		return maxIndex
 
 	def __alphabeta(self, field, depth, alpha, beta, maximizingPlayer):
-		fieldValue = self.__evaluateField(field)
-		if abs(fieldValue) == 512:
+		fieldValue = self.__evaluateField(field, depth)
+		if abs(fieldValue) >= 512:
 			return fieldValue
 		if depth == 0 or fieldValue != 0:
 			return fieldValue
@@ -73,7 +73,7 @@ class KIPlayer(Player):
 					break
 			return val
 
-	def __evaluateField(self, field):
+	def __evaluateField(self, field, depth):
 		# Needs to improved ALOT
 		winVal = field.checkWinner()
 		looseVal = not winVal
@@ -81,7 +81,7 @@ class KIPlayer(Player):
 		if winVal == None or winVal == 'draw':
 			return 0
 		elif winVal == self.__playerValue:
-			return 512
+			return (512 * (depth +1))
 		elif looseVal == self.__playerValue:
-			return -512
+			return (-512 * (depth +1))
 		return 0

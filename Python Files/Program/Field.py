@@ -28,7 +28,7 @@ class Field(ABC):
             self._playground[last] = None
             self._red.pop()
             self.__changePlayer()
-        elif len(self._yellow) > 0:
+        elif not self.getActivePlayer() and len(self._yellow) > 0:
             last = self._yellow[len(self._yellow)-1]
             self._playground[last] = None
             self._yellow.pop()
@@ -112,7 +112,7 @@ class Field(ABC):
                 if last - (i*x) > -1 and currentPlayground[last - (i*x)] == currentPlayground[last]:
                     if i == 1 and math.floor((last-(i*x))/7) == math.floor(last/7):
                         win = win + 1
-                    elif math.floor((last-(i*x))/7) == math.floor(last/7) - x:
+                    elif i != 1 and math.floor((last-(i*x))/7) == math.floor(last/7) - x:
                         win = win + 1
                     else:
                         break
