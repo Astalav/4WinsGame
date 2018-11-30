@@ -24,6 +24,15 @@ class HumanPlayer(Player):
 					return x
 		return None
 
+class RandomPlayer(Player):
+	def __init__(self, playerValue):
+		self.__playerValue = playerValue
+
+	def play(self, field, pos):
+		possibleMoves = field.possibleMoves()
+		shuffle(possibleMoves)
+
+		return possibleMoves[0]
 
 class KIPlayer(Player):
 	def __init__(self, playerValue):
