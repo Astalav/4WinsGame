@@ -12,7 +12,7 @@ class GUI():
         self.__playground = Field()
         self.__PLAYER1_VALUE = True #red
         self.__PLAYER2_VALUE = False #yellow
-        self.player1 = Player.RandomPlayer(self.__PLAYER1_VALUE)
+        self.player1 = Player.HumanPlayer(self.__PLAYER1_VALUE)
         # self.player2 = Player.HumanPlayer(self.__PLAYER2_VALUE)
         # self.player1 = Player.KIPlayer(self.__PLAYER1_VALUE)
         self.player2 = Player.KIPlayer(self.__PLAYER2_VALUE)
@@ -86,7 +86,7 @@ class GUI():
             self.__playground = Field()
 
         if self.__undo.collidepoint(pos):
-            self.__playground._undo()
+            self.__playground.undo()
   
 
 

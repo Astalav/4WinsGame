@@ -22,7 +22,7 @@ class Field(ABC):
     # changes current Player
         self._activePlayer = not self._activePlayer
 
-    def _undo(self):
+    def undo(self):
         if self.getActivePlayer() and len(self._red) > 0:
             last = self._red[len(self._red)-1]
             self._playground[last] = None
